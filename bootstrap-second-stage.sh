@@ -1,4 +1,4 @@
-#!/data/data/com.AliSystem/files/usr/bin/bash
+#!/data/data/com.AliSystem.secure/files/usr/bin/bash
 # Ali Terminal - First Run Setup
 
 HOME_DIR="$HOME"
@@ -15,14 +15,14 @@ foreground=#d8dee9
 cursor=#88c0d0
 EOF
 
-# 2. Termux properties (extra keys hata do taake clean lage)
+# 2. Termux properties
 cat > "$HOME_DIR/.termux/termux.properties" << 'EOF'
 extra-keys = []
 EOF
 
 # 3. MOTD banner
 cat > "$ALI_DIR/motd.sh" << 'MOTDEOF'
-#!/data/data/com.AliSystem/files/usr/bin/bash
+#!/data/data/com.AliSystem.secure/files/usr/bin/bash
 CYAN='\033[1;36m'
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
@@ -40,8 +40,8 @@ cat << 'LOGO'
 LOGO
 echo -e "${RESET}"
 
-DATE=$(date "+%A, %d %B %Y")
-TIME=$(date "+%I:%M:%S %p")
+DATE=$(TZ='Asia/Karachi' date "+%A, %d %B %Y")
+TIME=$(TZ='Asia/Karachi' date "+%I:%M:%S %p")
 
 echo -e "  ${GREEN}╭──────────────────────────────────────────╮${RESET}"
 echo -e "  ${GREEN}│${RESET}  📅 Date : ${YELLOW}$DATE${RESET}"
@@ -49,7 +49,7 @@ echo -e "  ${GREEN}│${RESET}  🕐 Time : ${YELLOW}$TIME${RESET}"
 echo -e "  ${GREEN}╰──────────────────────────────────────────╯${RESET}"
 
 # Storage
-STORAGE=$(df -h /data/data/com.AliSystem/files 2>/dev/null | tail -1 | awk '{print $4}')
+STORAGE=$(df -h /data/data/com.AliSystem.secure/files 2>/dev/null | tail -1 | awk '{print $4}')
 [ -n "$STORAGE" ] && echo -e "  💾 Storage : ${GREEN}${STORAGE} free${RESET}"
 
 # RAM
@@ -71,10 +71,13 @@ MOTDEOF
 
 chmod +x "$ALI_DIR/motd.sh"
 
-# 4. .bashrc
+# 4. .bashrc with Pakistan timezone
 cat > "$HOME_DIR/.bashrc" << 'RCEOF'
 # Ali Terminal - Professional Prompt
 PS1='\[\033[1;35m\]┌─[\033[1;32m\]ali\[\033[1;35m\]@\[\033[1;36m\]secure\[\033[1;35m\]]─[\033[1;33m\]\w\[\033[1;35m\]]\n\[\033[1;35m\]└──╼ \[\033[1;37m\]\$ \[\033[0m\]'
+
+# Pakistan Time Zone (Islamabad)
+export TZ='Asia/Karachi'
 
 alias ls='ls --color=auto'
 alias ll='ls -la'
